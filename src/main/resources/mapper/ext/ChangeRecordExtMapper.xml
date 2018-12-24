@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yang.dior.mapper.ext.ChangeRecordExtMapper">
+    <select id="selectList" resultType="com.yang.dior.model.ext.ChangeRecordExt">
+        SELECT
+        a.*,
+        b.`name`,
+        b.mobile,
+        c.name as productName
+        FROM
+        change_record a
+        LEFT JOIN user_info b ON a.uid = b.id
+        LEFT JOIN product c ON a.pid = c.id
+        WHERE
+        1=1
+        <if test="name!=null and name !=''">
+            b.name = #{name}
+        </if>
+        <if test="mobile!=null and mobile !=''">
+            b.mobile = #{mobile}
+        </if>
+        <if test="id!=null and id !=''">
+            b.id = #{uid}
+        </if>
+        order by a.id desc
+    </select>
+
+    <select id="countList" resultType="int">
+        SELECT
+        count(1)
+        FROM
+        change_record a
+        LEFT JOIN user_info b ON a.uid = b.id
+        WHERE
+        1=1
+        <if test="name!=null and name !=''">
+            b.name = #{name}
+        </if>
+        <if test="mobile!=null and mobile !=''">
+            b.mobile = #{mobile}
+        </if>
+        <if test="id!=null and id !=''">
+            b.id = #{uid}
+        </if>
+    </select>
+
+    <select id="selectOrderList" resultType="com.yang.dior.model.ext.ChangeRecordExt">
+        SELECT
+            a.num,
+            a.cost,
+            c.`name` AS productName
+        FROM
+            change_record a
+                LEFT JOIN `order` b ON a.orderId = b.id
+                LEFT JOIN product c ON a.pid = c.id
+        WHERE
+            b.uid = #{uid}
+    </select>
+</mapper>

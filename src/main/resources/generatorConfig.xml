@@ -47,10 +47,40 @@
             <!-- 是否在当前路径下新加一层schema,eg：fase路径com.oop.eksp.user.model， true:com.oop.eksp.user.model.[schemaName] -->
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
-        <table tableName="user" domainObjectName="User">
-            <property name="useActualColumnNames" value="true"/>
+        <!--<table tableName="product" domainObjectName="Product">-->
+            <!--<property name="useActualColumnNames" value="false"/>-->
+            <!--&lt;!&ndash;<columnOverride column="type" javaType="java.lang.Integer"/>&ndash;&gt;-->
+        <!--</table>-->
+
+        <!--<table tableName="share_map" domainObjectName="ShareMap">-->
+            <!--<property name="useActualColumnNames" value="false"/>-->
+            <!--&lt;!&ndash;<columnOverride column="type" javaType="java.lang.Integer"/>&ndash;&gt;-->
+        <!--</table>-->
+
+        <!--<table tableName="change_record" domainObjectName="ChangeRecord">-->
+            <!--<property name="useActualColumnNames" value="false"/>-->
+            <!--&lt;!&ndash;<columnOverride column="type" javaType="java.lang.Integer"/>&ndash;&gt;-->
+        <!--</table>-->
+
+        <table tableName="user_order" domainObjectName="Order">
+            <property name="useActualColumnNames" value="false"/>
             <!--<columnOverride column="type" javaType="java.lang.Integer"/>-->
         </table>
+
+        <!--<table tableName="user_amount" domainObjectName="UserAmount">-->
+            <!--<property name="useActualColumnNames" value="false"/>-->
+            <!--&lt;!&ndash;<columnOverride column="type" javaType="java.lang.Integer"/>&ndash;&gt;-->
+        <!--</table>-->
+
+        <!--<table tableName="user_info" domainObjectName="UserInfo">-->
+            <!--<property name="useActualColumnNames" value="false"/>-->
+            <!--&lt;!&ndash;<columnOverride column="type" javaType="java.lang.Integer"/>&ndash;&gt;-->
+        <!--</table>-->
+
+        <!--<table tableName="order" domainObjectName="Order">-->
+            <!--<property name="useActualColumnNames" value="false"/>-->
+            <!--&lt;!&ndash;<columnOverride column="type" javaType="java.lang.Integer"/>&ndash;&gt;-->
+        <!--</table>-->
 
 
 

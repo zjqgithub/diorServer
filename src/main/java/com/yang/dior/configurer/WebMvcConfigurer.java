@@ -100,7 +100,7 @@ public class WebMvcConfigurer extends WebMvcConfigurerAdapter {
     //解决跨域问题
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        //registry.addMapping("/**");
+        registry.addMapping("/**");
     }
 
 //    //添加拦截器
@@ -141,13 +141,13 @@ public class WebMvcConfigurer extends WebMvcConfigurerAdapter {
         }
     }
 
-    /**
-     * 一个简单的签名认证，规则：请求参数按ASCII码排序后，拼接为a=value&b=value...这样的字符串后进行MD5
-     *
-     * @param request
-     * @param requestSign
-     * @return
-     */
+//    /**
+//     * 一个简单的签名认证，规则：请求参数按ASCII码排序后，拼接为a=value&b=value...这样的字符串后进行MD5
+//     *
+//     * @param request
+//     * @param requestSign
+//     * @return
+//     */
 //    private boolean validateSign(HttpServletRequest request, String requestSign) {
 //        List<String> keys = new ArrayList<String>(request.getParameterMap().keySet());
 //        Collections.sort(keys);
