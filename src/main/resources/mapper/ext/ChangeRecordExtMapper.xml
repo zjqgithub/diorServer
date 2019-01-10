@@ -51,9 +51,11 @@
             c.`name` AS productName
         FROM
             change_record a
-                LEFT JOIN `order` b ON a.orderId = b.id
+                LEFT JOIN `user_order` b ON a.orderId = b.id
                 LEFT JOIN product c ON a.pid = c.id
         WHERE
             b.uid = #{uid}
+        AND
+            b.id = #{orderId}
     </select>
 </mapper>

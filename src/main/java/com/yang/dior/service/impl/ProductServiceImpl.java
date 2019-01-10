@@ -1,6 +1,7 @@
 package com.yang.dior.service.impl;
 
 import com.github.pagehelper.PageHelper;
+import com.google.common.collect.Lists;
 import com.yang.dior.core.PageBean;
 import com.yang.dior.mapper.ext.ProductExtMapper;
 import com.yang.dior.model.Product;
@@ -44,8 +45,11 @@ public class ProductServiceImpl implements ProductService {
             criteria.andTypeEqualTo(request.getType());
         }
         productExample.setOrderByClause("id desc");
-        List<Product> products = productMapper.selectByExample(productExample);
         int count = productMapper.countByExample(productExample);
+        List<Product> products = Lists.newArrayList();
+        if (count > 0) {
+            products = productMapper.selectByExample(productExample);
+        }
         PageBean<Product> pageData = new PageBean<>(request.getPage(), request.getLimit(), count);
         pageData.setItems(products);
         return pageData;

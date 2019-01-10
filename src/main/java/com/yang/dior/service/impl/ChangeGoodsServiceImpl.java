@@ -14,6 +14,7 @@ import com.yang.dior.service.ChangeGoodsService;
 import com.yang.dior.service.OrderService;
 import com.yang.dior.service.ProductService;
 import com.yang.dior.service.UserService;
+import com.yang.dior.utils.OrderCodeFactory;
 import com.yang.dior.utils.ResultUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -71,17 +73,20 @@ public class ChangeGoodsServiceImpl implements ChangeGoodsService {
         if (CollectionUtils.isEmpty(lists)) {
             return ResultUtils.failResult("没有添加任何东西哦~");
         }
-        if (request.getUid() == null || request.getOperator() == null || request.getCost() == null) {
+        lists.forEach(r->r.setCost(computeTotal(r)));
+        int sum = lists.stream().mapToInt(r -> r.getCost()).sum();
+        request.setCost(sum);
+        if (request.getUid() == null || request.getOperator() == null || request.getCost() == 0) {
             return ResultUtils.failResult("检查一下哪里不对哦~");
         }
-        String orderId = UUID.randomUUID().toString();
+        String orderCode = OrderCodeFactory.getOrderCode(request.getUid().toString());
         UserInfo userInfo = userService.getById(request.getUid());
         if (userInfo == null) {
             return ResultUtils.failResult("用户不存在");
         }
         // 创建订单
         Order order = new Order();
-        order.setId(orderId);
+        order.setId(orderCode);
         order.setUid(request.getUid());
         order.setOperator(request.getOperator());
         order.setBalancePre(userInfo.getBalance());
@@ -90,12 +95,19 @@ public class ChangeGoodsServiceImpl implements ChangeGoodsService {
         order.setCreateTime(new Date());
         orderService.creatorOrder(order);
         // 插入记录
-        lists.forEach(e -> saveRecord(e));
+        lists.forEach(e -> {
+            e.setOrderid(orderCode);
+            saveRecord(e);
+        });
         // 更新用户余额
         UserInfo user = new UserInfo();
         user.setId(request.getUid());
         user.setBalance(userInfo.getBalance() - request.getCost());
-        userService.updateUser(userInfo);
+        userService.updateUser(user);
         return ResultUtils.sucResult("success");
+    }
+
+    private int computeTotal(ChangeRecord record) {
+        return productService.getPriceById(record.getPid()) * record.getNum();
     }
 }

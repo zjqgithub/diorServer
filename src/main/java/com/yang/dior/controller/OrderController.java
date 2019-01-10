@@ -30,4 +30,10 @@ public class OrderController {
         JSONObject orderList = orderService.getOrderList(request);
         return ResultGenerator.genSuccessResult(orderList);
     }
+
+    @PostMapping("/save")
+    public Result save(@RequestBody OrderRequest request) {
+
+        return ResultGenerator.genSuccessResult(null);
+    }
 }

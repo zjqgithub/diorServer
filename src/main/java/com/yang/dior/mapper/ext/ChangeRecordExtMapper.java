@@ -24,5 +24,5 @@ public interface ChangeRecordExtMapper extends ChangeRecordMapper {
 
     int countList(ChangeRecordRequest request);
 
-    List<ChangeRecordExt> selectOrderList(@Param("uid")Integer uid);
+    List<ChangeRecordExt> selectOrderList(@Param("uid") Integer uid, @Param("orderId") String orderId);
 }

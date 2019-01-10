@@ -11,7 +11,7 @@ import com.yang.dior.request.AddUserRequest;
 import com.yang.dior.request.UserRequest;
 import com.yang.dior.service.ShareMapService;
 import com.yang.dior.service.UserService;
-import io.swagger.annotations.*;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,7 +24,6 @@ import java.util.List;
  * @Date 2018/11/21 18:13
  *
  ***/
-@Api(value = "用户ctrl", tags = {"用户操作接口"})
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -36,25 +35,14 @@ public class UserController {
     private ShareMapService shareMapService;
 
 
-    @ApiOperation(value = "注册")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "mobile", value = "手机号", required = true, paramType = "form"),
-            @ApiImplicitParam(name = "pwd", value = "密码", required = true, paramType = "form"),
-            @ApiImplicitParam(name = "creator_id", value = "用户ID", required = true, paramType = "form")
-    })
     @PostMapping("/register")
-    public Result register(@RequestBody @ApiParam(name = "request", value = "传入json格式(表单提交)", required = true) AddUserRequest request) {
+    public Result register(@RequestBody AddUserRequest request) {
         JSONObject register = userService.register(request);
         return ResultGenerator.genJSONResult(register);
     }
 
-    @ApiOperation(value = "登录")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "mobile", value = "手机号", required = true, paramType = "form"),
-            @ApiImplicitParam(name = "pwd", value = "密码", required = true, paramType = "form")
-    })
     @PostMapping("/login")
-    public Result login(@RequestBody @ApiParam(name = "request", value = "传入json格式(表单提交)", required = true) AddUserRequest request) {
+    public Result login(@RequestBody AddUserRequest request) {
         JSONObject login = userService.login(request);
         List<JSONObject> lists = Lists.newArrayList();
         JSONObject resultData = new JSONObject();
@@ -66,14 +54,13 @@ public class UserController {
             List<JSONObject> shareList = shareMapService.getShareListById(id);
             lists.addAll(childrenList);
             lists.addAll(shareList);
-            resultData.put("uid",id);
-            resultData.put("lists",lists);
+            resultData.put("uid", id);
+            resultData.put("lists", lists);
         }
         login.put(ResultConsts.data, resultData);
         return ResultGenerator.genSuccessResult(login);
     }
 
-    @ApiOperation(value = "登出")
     @PostMapping("/logout")
     public Result logout() {
         return ResultGenerator.genSuccessResult(null);

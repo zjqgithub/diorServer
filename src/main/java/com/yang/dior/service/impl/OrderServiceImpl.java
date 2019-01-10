@@ -45,6 +45,7 @@ public class OrderServiceImpl implements OrderService {
         orderMapper.insertSelective(record);
     }
 
+
     @Override
     public JSONObject getOrderList(OrderRequest request) {
         List<OrderList> lists = Lists.newArrayList();
@@ -52,13 +53,18 @@ public class OrderServiceImpl implements OrderService {
         OrderExample.Criteria criteria = example.or();
         criteria.andUidEqualTo(request.getUid());
         example.setOrderByClause("create_time desc");
+        int count = orderMapper.countByExample(example);
+        if (count == 0) {
+            return ResultUtils.sucResult(ResultConsts.success, lists);
+        }
         List<Order> orders = orderMapper.selectByExample(example);
-        if (CollectionUtils.isEmpty(orders)) {
+        if (!CollectionUtils.isEmpty(orders)) {
             orders.forEach(e -> {
                 OrderList orderList = new OrderList();
+                orderList.setId(e.getId());
                 orderList.setCost(e.getCost());
                 orderList.setCreateTime(e.getCreateTime());
-                List<ChangeRecordExt> changeRecordExts = changeRecordExtMapper.selectOrderList(e.getUid());
+                List<ChangeRecordExt> changeRecordExts = changeRecordExtMapper.selectOrderList(e.getUid(), e.getId());
                 orderList.setRecords(changeRecordExts);
                 lists.add(orderList);
             });
